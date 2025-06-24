@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Districts Constraint Graph</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .graph-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .graph-svg {
+            flex: 1;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .analysis {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .degree-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .degree-table th, .degree-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .degree-table th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .highest-degree {
+            background-color: #fff3cd;
+            font-weight: bold;
+        }
+        .conclusion {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #6c757d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flower Districts Constraint Graph Analysis</h2>
+        
+        <div class="graph-container">
+            <svg class="graph-svg" width="500" height="400" viewBox="0 0 500 400">
+                <!-- Define arrow marker for directed edges (though this is undirected) -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                            refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+                    </marker>
+                </defs>
+                
+                <!-- Edges (drawn first so they appear behind nodes) -->
+                <!-- Daisy connections -->
+                <line x1="100" y1="80" x2="250" y2="50" stroke="#666" stroke-width="2"/>  <!-- D-DF -->
+                <line x1="100" y1="80" x2="200" y2="120" stroke="#666" stroke-width="2"/>  <!-- D-SF -->
+                <line x1="100" y1="80" x2="150" y2="180" stroke="#666" stroke-width="2"/>  <!-- D-V -->
+                <line x1="100" y1="80" x2="50" y2="150" stroke="#666" stroke-width="2"/>   <!-- D-BB -->
+                
+                <!-- Daffodil connections -->
+                <line x1="250" y1="50" x2="200" y2="120" stroke="#666" stroke-width="2"/>  <!-- DF-SF -->
+                <line x1="250" y1="50" x2="350" y2="120" stroke="#666" stroke-width="2"/>  <!-- DF-MG -->
+                
+                <!-- Marigold connections -->
+                <line x1="350" y1="120" x2="200" y2="120" stroke="#666" stroke-width="2"/>  <!-- MG-SF -->
+                <line x1="350" y1="120" x2="300" y2="220" stroke="#666" stroke-width="2"/>  <!-- MG-T -->
+                
+                <!-- Sun Flower connections -->
+                <line x1="200" y1="120" x2="150" y2="180" stroke="#666" stroke-width="2"/>  <!-- SF-V -->
+                
+                <!-- Violet connections -->
+                <line x1="150" y1="180" x2="300" y2="220" stroke="#666" stroke-width="2"/>  <!-- V-T -->
+                <line x1="150" y1="180" x2="200" y2="280" stroke="#666" stroke-width="2"/>  <!-- V-P -->
+                <line x1="150" y1="180" x2="50" y2="150" stroke="#666" stroke-width="2"/>   <!-- V-BB -->
+                
+                <!-- Tulip connections -->
+                <line x1="300" y1="220" x2="200" y2="280" stroke="#666" stroke-width="2"/>  <!-- T-P -->
+                
+                <!-- Poppy connections -->
+                <line x1="200" y1="280" x2="150" y2="350" stroke="#666" stroke-width="2"/>  <!-- P-R -->
+                <line x1="200" y1="280" x2="50" y2="150" stroke="#666" stroke-width="2"/>   <!-- P-BB -->
+                
+                <!-- Bluebell connections -->
+                <line x1="50" y1="150" x2="150" y2="350" stroke="#666" stroke-width="2"/>   <!-- BB-R -->
+                
+                <!-- Rose connections (already drawn) -->
+                
+                <!-- Nodes -->
+                <circle cx="100" cy="80" r="25" fill="#FFB6C1" stroke="#333" stroke-width="2"/>
+                <text x="100" y="85" text-anchor="middle" font-size="12" font-weight="bold">D</text>
+                <text x="100" y="110" text-anchor="middle" font-size="10">Daisy</text>
+                
+                <circle cx="250" cy="50" r="25" fill="#FFFF99" stroke="#333" stroke-width="2"/>
+                <text x="250" y="55" text-anchor="middle" font-size="12" font-weight="bold">DF</text>
+                <text x="250" y="80" text-anchor="middle" font-size="10">Daffodil</text>
+                
+                <circle cx="350" cy="120" r="25" fill="#FFA500" stroke="#333" stroke-width="2"/>
+                <text x="350" y="125" text-anchor="middle" font-size="12" font-weight="bold">MG</text>
+                <text x="350" y="150" text-anchor="middle" font-size="10">Marigold</text>
+                
+                <circle cx="200" cy="120" r="25" fill="#FFD700" stroke="#333" stroke-width="2"/>
+                <text x="200" y="125" text-anchor="middle" font-size="12" font-weight="bold">SF</text>
+                <text x="200" y="150" text-anchor="middle" font-size="10">Sunflower</text>
+                
+                <circle cx="150" cy="180" r="25" fill="#9370DB" stroke="#333" stroke-width="2"/>
+                <text x="150" y="185" text-anchor="middle" font-size="12" font-weight="bold">V</text>
+                <text x="150" y="210" text-anchor="middle" font-size="10">Violet</text>
+                
+                <circle cx="300" cy="220" r="25" fill="#FF69B4" stroke="#333" stroke-width="2"/>
+                <text x="300" y="225" text-anchor="middle" font-size="12" font-weight="bold">T</text>
+                <text x="300" y="250" text-anchor="middle" font-size="10">Tulip</text>
+                
+                <circle cx="200" cy="280" r="25" fill="#FF4500" stroke="#333" stroke-width="2"/>
+                <text x="200" y="285" text-anchor="middle" font-size="12" font-weight="bold">P</text>
+                <text x="200" y="310" text-anchor="middle" font-size="10">Poppy</text>
+                
+                <circle cx="50" cy="150" r="25" fill="#4169E1" stroke="#333" stroke-width="2"/>
+                <text x="50" y="155" text-anchor="middle" font-size="12" font-weight="bold">BB</text>
+                <text x="50" y="180" text-anchor="middle" font-size="10">Bluebell</text>
+                
+                <circle cx="150" cy="350" r="25" fill="#DC143C" stroke="#333" stroke-width="2"/>
+                <text x="150" y="355" text-anchor="middle" font-size="12" font-weight="bold">R</text>
+                <text x="150" y="380" text-anchor="middle" font-size="10">Rose</text>
+            </svg>
+            
+            <div class="analysis">
+                <h3>Variable Ordering Analysis</h3>
+                <p><strong>Most Constrained Variable (MCV) Heuristic:</strong></p>
+                <table class="degree-table">
+                    <thead>
+                        <tr>
+                            <th>District</th>
+                            <th>Degree</th>
+                            <th>Neighbors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highest-degree">
+                            <td>Violet (V)</td>
+                            <td>5</td>
+                            <td>SF, D, T, P, BB</td>
+                        </tr>
+                        <tr>
+                            <td>Daisy (D)</td>
+                            <td>4</td>
+                            <td>DF, SF, V, BB</td>
+                        </tr>
+                        <tr>
+                            <td>Poppy (P)</td>
+                            <td>4</td>
+                            <td>T, R, BB, V</td>
+                        </tr>
+                        <tr>
+                            <td>Bluebell (BB)</td>
+                            <td>4</td>
+                            <td>D, V, P, R</td>
+                        </tr>
+                        <tr>
+                            <td>Sun Flower (SF)</td>
+                            <td>4</td>
+                            <td>DF, D, MG, V</td>
+                        </tr>
+                        <tr>
+                            <td>Daffodil (DF)</td>
+                            <td>3</td>
+                            <td>D, SF, MG</td>
+                        </tr>
+                        <tr>
+                            <td>Marigold (MG)</td>
+                            <td>3</td>
+                            <td>DF, SF, T</td>
+                        </tr>
+                        <tr>
+                            <td>Tulip (T)</td>
+                            <td>3</td>
+                            <td>MG, P, V</td>
+                        </tr>
+                        <tr>
+                            <td>Rose (R)</td>
+                            <td>2</td>
+                            <td>BB, P</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Reasoning:</strong><br>
+                The Most Constrained Variable (MCV) heuristic chooses the variable with the most constraints (highest degree) first. This helps to quickly identify if a solution exists and reduces the search space early.</p>
+                
+                <p><strong>Alternative Consideration:</strong><br>
+                If we had additional information about domain sizes, we might also consider the Minimum Remaining Values (MRV) heuristic.</p>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h3>Answer: First District to Assign a Color</h3>
+            <p><strong>Violet (V)</strong> should be assigned a color first.</p>
+            <p><strong>Reason:</strong> Violet has the highest degree (5 neighbors), making it the most constrained variable. By the Most Constrained Variable heuristic, we should assign colors to the most constrained variables first because:</p>
+            <ul>
+                <li>It's most likely to cause a dead-end if left for later</li>
+                <li>It provides the most information to guide subsequent assignments</li>
+                <li>It helps detect unsolvable situations early in the search</li>
+            </ul>
+        </div>
+        
+        <h3>Adjacency Information</h3>
+        <p><strong>Edges in the constraint graph represent districts that share borders and cannot have the same color:</strong></p>
+        <div style="columns: 2; column-gap: 30px; margin: 15px 0;">
+            <p>• Daisy ↔ Daffodil, Sun Flower, Violet, Bluebell</p>
+            <p>• Daffodil ↔ Daisy, Sun Flower, Marigold</p>
+            <p>• Marigold ↔ Daffodil, Sun Flower, Tulip</p>
+            <p>• Sun Flower ↔ Daffodil, Daisy, Marigold, Violet</p>
+            <p>• Violet ↔ Sun Flower, Daisy, Tulip, Poppy, Bluebell</p>
+            <p>• Tulip ↔ Marigold, Poppy, Violet</p>
+            <p>• Poppy ↔ Tulip, Rose, Bluebell, Violet</p>
+            <p>• Bluebell ↔ Daisy, Violet, Poppy, Rose</p>
+            <p>• Rose ↔ Bluebell, Poppy</p>
+        </div>
+    </div>
+</body>
+</html>
